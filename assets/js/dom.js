@@ -1,5 +1,7 @@
 export let moviesList = null;
 export let inputSearch = null;
+export let triggerMode = false;
+
 const createElement = ({
   type,
   attrs, 
@@ -17,50 +19,81 @@ const createElement = ({
  
   if (container && position === 'append') container.append(el);
   if (container && position === 'prepend') container.prepend(el);
+  if (evt && handler && typeof handler === 'function') el.addEventListener(evt, handler);
 
   return el;
 };
 
 export const createStyle = () => {
-  const headStyle = document.createElement('style');
-
-  headStyle.innerHTML = `
-  * {
-  box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  .container {
-    padding: 20px;
-  }
-
-  .movies {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-  }
-
-  .movie {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .movie__image {
-    width: 100%;
-    object-fit: cover;
-  }`;
-  document.head.append(headStyle);
+  createElement({
+    type: 'style',
+    attrs: {
+      innerHTML: `
+      * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    .container {
+      width: min(100% - 40px, 1180px);
+      margin-inline: auto;
+    }
+    
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .movie {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .movie__image {
+      width: 100%;
+      object-fit: cover;
+    }
+    
+    .search {
+      margin-bottom: 30px;
+    }
+    
+    .search__label-input {
+      display: block;
+      margin-bottom: 7px;
+    }
+    
+    .search__input {
+      display: block;
+      max-width: 400px;
+      width: 100%;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border: 1px solid lightgray;
+      border-radius: 4px;
+    }
+    
+    .search__label-checkbox {
+      font-size: 12px;
+      display: inline-block;
+      transform: translate(7px, -2px);
+    }
+    `
+    },
+    container: document.head
+  });
 };
 
 export const createMarkup = () => {
   const container = createElement({
     type: 'div',
-    attrs: {class: 'containet'},
+    attrs: {class: 'container'},
     container: document.body,
     position: 'prepend',
   });
@@ -71,22 +104,22 @@ export const createMarkup = () => {
     container,
   });
 
-  const searchbox = createElement({
+  const searchBox = createElement({
     type: 'div',
     attrs: {class: 'search'},
     container
   });
 
-  const inputbox = createElement({
+  const inputBox = createElement({
     type: 'div',
     attrs: {class: 'search__group search__group--input'},
-    container: searchbox,
+    container: searchBox,
   });
 
-  const checkbox = createElement({
+  const checkBox = createElement({
     type: 'div',
     attrs: {class: 'search__group search__group--checkbox'},
-    container: searchbox,
+    container: searchBox,
   });
 
   createElement({
@@ -96,7 +129,7 @@ export const createMarkup = () => {
       for: 'search',
       innerHTML: 'Поиск фильмов'
     },
-    container: inputbox
+    container: inputBox
   });
 
   inputSearch = createElement({
@@ -107,7 +140,7 @@ export const createMarkup = () => {
       type: 'search',
       placeholder: 'Начните вводить текст...'
     },
-    container: inputbox
+    container: inputBox
   });
 
   createElement({
@@ -117,13 +150,25 @@ export const createMarkup = () => {
       id: 'checkbox',
       type: 'checkbox',
     },
-    container: inputbox
+    container: checkBox,
+    evt: 'click',
+    handler: () => triggerMode = !triggerMode
   });
 
   const movies = createElement({
     type: 'div',
     attrs: {class: 'movies'},
     container
+  });
+
+  createElement({
+    type: 'label',
+    attrs: {
+      class: 'search__label-checkbox',
+      for: 'checkbox',
+      innerHTML: 'Добавлять фильмы к существующим спискам'
+    },
+    container: checkBox
   });
  
   moviesList = document.querySelector('.movies');
@@ -147,3 +192,5 @@ export const addMovieToList = (movie) => {
     container: item
   });
 };
+
+export const clearMoviesMarkup = (el) => el && (el.innerHTML = '');
