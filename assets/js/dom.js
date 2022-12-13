@@ -36,11 +36,14 @@ export const createStyle = () => {
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
+      background-image: url(assets/img/bg.jpg);
+      color: beige;
     }
     
     .container {
       width: min(100% - 40px, 1180px);
       margin-inline: auto;
+      text-align: center;
     }
     
     .movies {
@@ -71,6 +74,8 @@ export const createStyle = () => {
     
     .search__input {
       display: block;
+      margin-left: auto;
+      margin-right: auto;
       max-width: 400px;
       width: 100%;
       padding: 10px 15px;
@@ -84,6 +89,7 @@ export const createStyle = () => {
       display: inline-block;
       transform: translate(7px, -2px);
     }
+    
     `
     },
     container: document.head
@@ -91,6 +97,8 @@ export const createStyle = () => {
 };
 
 export const createMarkup = () => {
+
+
   const container = createElement({
     type: 'div',
     attrs: {class: 'container'},
