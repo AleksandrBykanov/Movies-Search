@@ -35,8 +35,31 @@ export const createStyle = () => {
     
     body {
       margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: Arial, Helvetica, sans-serif;
       background-image: url(assets/img/bg.jpg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: black;
+      color: beige;
+    }
+    
+    .header {
+      height: 150px;
+      background-image: url(assets/img/header.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%;
+    }
+    
+    .footer {
+      min-height: 50px;
+      padding: 20px 0;
+      margin-top: auto;
+      flex-shrink: 0;
+      text-align: center;
       color: beige;
     }
     
@@ -44,12 +67,14 @@ export const createStyle = () => {
       width: min(100% - 40px, 1180px);
       margin-inline: auto;
       text-align: center;
+      flex-grow: 1;
     }
     
     .movies {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 20px;
+      padding-bottom: 20px;
     }
     
     .movie {
@@ -89,7 +114,6 @@ export const createStyle = () => {
       display: inline-block;
       transform: translate(7px, -2px);
     }
-    
     `
     },
     container: document.head
@@ -97,11 +121,29 @@ export const createStyle = () => {
 };
 
 export const createMarkup = () => {
+    const footer = createElement({
+    type: 'div',
+    attrs: {class: 'footer'},
+    container: document.body,
+    position: 'prepend',
+  });
 
-
+  createElement({
+    type: 'span',
+    attrs: {innerHTML: 'Alexandr Bykanov'},
+    container: footer,
+  });
+    
   const container = createElement({
     type: 'div',
     attrs: {class: 'container'},
+    container: document.body,
+    position: 'prepend',
+  });
+
+  const header = createElement({
+    type: 'div',
+    attrs: {class: 'header'},
     container: document.body,
     position: 'prepend',
   });
